@@ -76,6 +76,7 @@ export default function Home() {
         "OOP",
         "Next Auth",
         "JWT AUTH",
+        "Swagger Documentation",
       ],
     },
     {
@@ -147,6 +148,7 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
               <Button
+                aria-label="Toggle theme"
                 variant="ghost"
                 size="icon"
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -193,11 +195,10 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
                 A passionate Full-Stack Software Developer from Lalitpur, Nepal
-                with 4 years of experience in building scalable,
-                high-performance web applications. I specialize in crafting
-                elegant user interfaces and robust backend systems using modern
-                web technologies. Let&apos;s create something amazing together!
-                🚀
+                with extensive experience in building scalable, high-performance
+                web applications. I specialize in crafting elegant user
+                interfaces and robust backend systems using modern web
+                technologies. Let&apos;s create something amazing together! 🚀
               </motion.p>
               <motion.div
                 className="flex gap-4 flex-wrap"
@@ -270,6 +271,9 @@ export default function Home() {
                       src={`${resumePath}#view=FitH`}
                       className="w-full h-[80vh] border-t"
                       title="Resume Preview"
+                      onError={(e) => {
+                        console.error("Resume preview failed", e);
+                      }}
                     />
                   </DialogContent>
                 </Dialog>
