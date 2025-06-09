@@ -224,7 +224,7 @@ export default function Home() {
                 >
                   <Button variant="outline" asChild>
                     <a
-                      href="https://github.com/yourusername"
+                      href="https://github.com/madan-ghimire"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
