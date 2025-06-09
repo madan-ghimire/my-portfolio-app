@@ -2,15 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-  Github,
-  Linkedin,
-  Mail,
-  MoonIcon,
-  SunIcon,
-  Download,
-  FileText,
-} from "lucide-react";
+import { Github, Linkedin, Mail, Download, FileText } from "lucide-react";
 
 import {
   Dialog,
@@ -19,71 +11,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useTheme } from "next-themes";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { ModeToggle } from "@/components/mode-toggle";
+import { projects, skills } from "@/constants/static-list";
+import BackToTopButton from "@/components/back-to-top-button";
 
 export default function Home() {
-  const { theme, setTheme } = useTheme();
-
   const resumePath = "/documents/madan-ghimire.pdf";
-
-  const projects = [
-    {
-      title: "Dynamic Web Application",
-      description:
-        "A dynamic web app built with React.js, Next.js, and Tailwind CSS, featuring advanced state management with Redux.",
-      tech: ["React.js", "Next.js", "Redux", "Tailwind CSS"],
-    },
-    {
-      title: "Robust Backend System",
-      description:
-        "A robust backend system using Node.js, Express.js, and Prisma ORM for efficient database interactions.",
-      tech: ["Node.js", "Express.js", "Prisma ORM", "JWT Auth"],
-    },
-    {
-      title: "SaaS Platform",
-      description:
-        "A full-stack SaaS platform with an intuitive UI using Ant Design and MUI, backed by a scalable API.",
-      tech: ["React.js", "Ant Design", "Material-UI", "Node.js"],
-    },
-  ];
-
-  const skills = [
-    {
-      category: "Frontend",
-      items: [
-        "React.js",
-        "Next.js",
-        "Kendo React",
-        "Ant Design",
-        "Material-UI",
-        "Redux",
-        "SCSS",
-        "Playwright Automation",
-        "Storybook",
-        "Tailwind CSS",
-      ],
-    },
-    {
-      category: "Backend",
-      items: [
-        "Node.js",
-        "Express.js",
-        "Prisma ORM",
-        "TypeScript",
-        "Nest.js",
-        "OOP",
-        "Next Auth",
-        "JWT AUTH",
-        "Swagger Documentation",
-      ],
-    },
-    {
-      category: "State Management",
-      items: ["Redux", "TanStack Query", "Redux toolkit", "Zustand"],
-    },
-  ];
 
   // Animation variants
   const fadeInUp = {
@@ -131,34 +66,15 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-background">
-      <motion.nav
-        className="fixed w-full bg-background/80 backdrop-blur-sm z-50 border-b"
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+      <div className="fixed w-full bg-background/80 backdrop-blur-sm z-50 border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <motion.h1
-            className="text-xl font-bold"
-            whileHover={{ scale: 1.1 }}
-            transition={{ duration: 0.2 }}
-          >
-            MG
-          </motion.h1>
-          <div className="flex items-center gap-4">
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-              <Button
-                aria-label="Toggle theme"
-                variant="ghost"
-                size="icon"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              >
-                {theme === "dark" ? <SunIcon /> : <MoonIcon />}
-              </Button>
-            </motion.div>
+          <h1 className="text-xl font-bold">MG</h1>
+
+          <div className="mr-4">
+            <ModeToggle />
           </div>
         </div>
-      </motion.nav>
+      </div>
 
       {/* Hero Section with Profile Image */}
       <section className="pt-32 pb-16 px-4">
@@ -212,7 +128,7 @@ export default function Home() {
                   whileTap="tap"
                 >
                   <Button asChild>
-                    <a href="mailto:your.email@example.com">
+                    <a href="mailto:madan.ghimire@example.com">
                       <Mail className="mr-2 h-4 w-4" />
                       Contact Me
                     </a>
@@ -269,7 +185,7 @@ export default function Home() {
                     </DialogHeader>
                     <iframe
                       src={`${resumePath}#view=FitH`}
-                      className="w-full h-[80vh] border-t"
+                      className="w-full h min-h-[90vh] border-t"
                       title="Resume Preview"
                       onError={(e) => {
                         console.error("Resume preview failed", e);
@@ -282,12 +198,18 @@ export default function Home() {
                   whileHover="hover"
                   whileTap="tap"
                 >
-                  <Button variant="secondary" asChild>
-                    <a href="/documents/madan-ghimire.pdf" download>
-                      <Download className="mr-2 h-4 w-4" />
+                  <a
+                    href={resumePath}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer"
+                  >
+                    <Button variant="secondary">
+                      <Download className="mr-2 h-4 w-4 cursor-pointer" />
                       Download Resume
-                    </a>
-                  </Button>
+                    </Button>
+                  </a>
                 </motion.div>
               </motion.div>
             </div>
@@ -539,6 +461,7 @@ export default function Home() {
         <div className="container mx-auto max-w-4xl px-4 text-center text-muted-foreground">
           © {new Date().getFullYear()} Madan Ghimire. All rights reserved.
         </div>
+        <BackToTopButton />
       </motion.footer>
     </main>
   );
