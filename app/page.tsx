@@ -111,10 +111,11 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
                 A passionate Full-Stack Software Developer from Lalitpur, Nepal
-                with extensive experience in building scalable, high-performance
-                web applications. I specialize in crafting elegant user
-                interfaces and robust backend systems using modern web
-                technologies. Let&apos;s create something amazing together! 🚀
+                with 5 years plus experience in building scalable,
+                high-performance web applications. I specialize in crafting
+                elegant user interfaces and robust backend systems using modern
+                web technologies. Let&apos;s create something amazing together!
+                🚀
               </motion.p>
               <motion.div
                 className="flex gap-4 flex-wrap"
