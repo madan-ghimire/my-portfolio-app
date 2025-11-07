@@ -18,7 +18,9 @@ import { projects, skills } from "@/constants/static-list";
 import BackToTopButton from "@/components/back-to-top-button";
 
 export default function Home() {
-  const resumePath = "/documents/madan-ghimire.pdf";
+  const resumePath = "/documents/madan-ghimire-resume.pdf";
+
+  console.log("check path here", resumePath);
 
   // Animation variants
   const fadeInUp = {
@@ -185,12 +187,9 @@ export default function Home() {
                       <DialogTitle>Resume Preview</DialogTitle>
                     </DialogHeader>
                     <iframe
-                      src={`${resumePath}#view=FitH`}
-                      className="w-full h min-h-[90vh] border-t"
+                      src={resumePath}
+                      className="w-full min-h-[90vh] border-t"
                       title="Resume Preview"
-                      onError={(e) => {
-                        console.error("Resume preview failed", e);
-                      }}
                     />
                   </DialogContent>
                 </Dialog>
