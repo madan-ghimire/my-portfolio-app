@@ -17,7 +17,6 @@ import {
   SiRedis,
   SiSocketdotio,
   SiPostgresql,
-  SiMysql,
   SiMongodb,
   SiSupabase,
   SiPrisma,
@@ -120,7 +119,6 @@ export const tech = defineTech({
   nodemailer: { name: "Nodemailer", icon: Mail, color: "#22B573" },
 
   postgres: { name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1" },
-  mysql: { name: "MySQL", icon: SiMysql, color: "#4479A1" },
   mssql: { name: "MS SQL", icon: Database, color: "#CC2927" },
   mongodb: { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
   supabase: { name: "Supabase", icon: SiSupabase, color: "#3ECF8E" },
@@ -218,7 +216,6 @@ export const skills = [
     category: "Databases & ORM",
     items: pick(
       "postgres",
-      "mysql",
       "mssql",
       "mongodb",
       "supabase",
