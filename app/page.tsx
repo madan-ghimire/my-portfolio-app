@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { ModeToggle } from "@/components/mode-toggle";
 import BackToTopButton from "@/components/back-to-top-button";
+import ContactForm from "@/components/contact-form";
 import {
   projectFilters,
   projects,
@@ -67,7 +68,7 @@ function SkillTile({ tech }: { tech: Tech }) {
   return (
     <li
       style={{ "--c": glow } as CSSProperties}
-      className="group flex flex-col items-center gap-2.5 rounded-xl border bg-card px-2 py-4 text-center text-xs font-medium transition duration-200 hover:border-[var(--c)] hover:shadow-[0_10px_28px_-10px_var(--c)] motion-safe:hover:-translate-y-1.5"
+      className="group flex flex-col items-center gap-2.5 rounded-xl border bg-card px-2 py-4 text-center text-xs font-medium transition duration-200 hover:border-(--c) hover:shadow-[0_10px_28px_-10px_var(--c)] motion-safe:hover:-translate-y-1.5"
     >
       <Icon
         className="h-8 w-8 transition-transform duration-200 motion-safe:group-hover:-rotate-6 motion-safe:group-hover:scale-125"
@@ -471,7 +472,7 @@ export default function Home() {
           <Projects />
 
           {/* Contact */}
-          <section id="contact" className="scroll-mt-20 px-4 py-20">
+          {/* <section id="contact" className="scroll-mt-20 px-4 py-20">
             <div className="container mx-auto max-w-4xl text-center">
               <h2 className="mb-3 text-3xl font-bold">
                 Let&apos;s work together
@@ -481,6 +482,35 @@ export default function Home() {
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 <Button asChild>
+                  <a href={`mailto:${EMAIL}`}>
+                    <Mail className="mr-2 h-4 w-4" />
+                    {EMAIL}
+                  </a>
+                </Button>
+                <Button variant="outline" asChild>
+                  <a href={LINKEDIN} target="_blank" rel="noopener noreferrer">
+                    <Linkedin className="mr-2 h-4 w-4" />
+                    LinkedIn
+                  </a>
+                </Button>
+              </div>
+            </div>
+          </section> */}
+
+          {/* Contact */}
+          <section id="contact" className="scroll-mt-20 px-4 py-20">
+            <div className="container mx-auto max-w-3xl">
+              <h2 className="mb-3 text-center text-3xl font-bold">
+                Let&apos;s work together
+              </h2>
+              <p className="mb-8 text-center text-muted-foreground">
+                Have a product to build or a team to join? Send me a message.
+              </p>
+
+              <ContactForm />
+
+              <div className="mt-6 flex flex-wrap justify-center gap-3">
+                <Button variant="outline" asChild>
                   <a href={`mailto:${EMAIL}`}>
                     <Mail className="mr-2 h-4 w-4" />
                     {EMAIL}
