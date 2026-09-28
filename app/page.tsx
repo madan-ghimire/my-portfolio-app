@@ -472,32 +472,6 @@ export default function Home() {
           <Projects />
 
           {/* Contact */}
-          {/* <section id="contact" className="scroll-mt-20 px-4 py-20">
-            <div className="container mx-auto max-w-4xl text-center">
-              <h2 className="mb-3 text-3xl font-bold">
-                Let&apos;s work together
-              </h2>
-              <p className="mb-8 text-muted-foreground">
-                Have a product to build or a team to join? Send me a message.
-              </p>
-              <div className="flex flex-wrap justify-center gap-3">
-                <Button asChild>
-                  <a href={`mailto:${EMAIL}`}>
-                    <Mail className="mr-2 h-4 w-4" />
-                    {EMAIL}
-                  </a>
-                </Button>
-                <Button variant="outline" asChild>
-                  <a href={LINKEDIN} target="_blank" rel="noopener noreferrer">
-                    <Linkedin className="mr-2 h-4 w-4" />
-                    LinkedIn
-                  </a>
-                </Button>
-              </div>
-            </div>
-          </section> */}
-
-          {/* Contact */}
           <section id="contact" className="scroll-mt-20 px-4 py-20">
             <div className="container mx-auto max-w-3xl">
               <h2 className="mb-3 text-center text-3xl font-bold">

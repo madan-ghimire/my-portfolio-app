@@ -372,16 +372,18 @@ export const projects: Project[] = [
   },
   {
     id: "banking",
-    title: "Rapid API banking platform",
+    title: "RAPID API banking platform",
     category: "Frontend",
     accent: "#4F46E5",
     icon: Landmark,
     summary:
-      "Dashboards for real-time transaction tracking and payment status, built on an in-house design system.",
+      "API banking platform that gives banks one secure, consent-driven integration point for their core banking and related systems. I build the frontend: reusable UI, dashboards and API integration.",
     highlights: [
+      "Frontend integration of the RAPID API layer, where every flow follows customer consent, security and compliance rules",
+      "Reusable UI interfaces and components on Radix UI, Tailwind and Tailwind Variants, shared across products",
+      "Secure API integration using schema-based patterns for type-safe, validated data",
       "Type-safe routing with TanStack Router loaders and actions",
-      "Reusable library on Radix UI, Tailwind and Tailwind Variants",
-      "Responsive, accessible layouts",
+      "Real-time transaction and payment status dashboards, responsive and accessible",
     ],
     tech: pick(
       "tanstackRouter",
@@ -393,6 +395,7 @@ export const projects: Project[] = [
     ),
     links: [],
   },
+
   {
     id: "smart-gateway",
     title: "Smart Gateway payments",
