@@ -12,8 +12,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  // Honeypot: real users never fill this hidden field, bots often do.
-  if (body.company) return NextResponse.json({ ok: true });
+  // Honeypot: real users should never fill this hidden field.
+  const company = String(body.company ?? "").trim();
+
+  if (company) {
+    // Return success so bots don't know they were detected.
+    return NextResponse.json({ ok: true });
+  }
 
   const name = String(body.name ?? "")
     .replace(/[\r\n]+/g, " ")

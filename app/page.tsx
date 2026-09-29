@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import {
   BookOpen,
-  Check,
   Download,
   ExternalLink,
   FileText,
@@ -14,7 +13,9 @@ import {
   Lock,
   Mail,
   MapPin,
+  Menu,
   Server,
+  X,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -42,8 +43,8 @@ const RESUME_PATH = "/documents/madan-ghimire-resume.pdf";
 const EMAIL = "madanghimire.dev@gmail.com";
 const GITHUB = "https://github.com/madan-ghimire";
 const LINKEDIN = "https://www.linkedin.com/in/madan-ghimire-21416a143/";
+const NAV = ["about", "skills", "projects", "contact"] as const;
 
-// Hero: the one orchestrated entrance on the page
 const heroParent = {
   hidden: {},
   show: { transition: { staggerChildren: 0.12 } },
@@ -59,6 +60,87 @@ const linkIcon: Record<ProjectLink["kind"], typeof ExternalLink> = {
   docs: BookOpen,
   code: Github,
 };
+
+/* ---------------- Header ---------------- */
+
+function Header() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  return (
+    <header className="relative z-50 shrink-0 border-b bg-background">
+      <div className="container mx-auto flex items-center justify-between px-4 py-4">
+        <a
+          href="#top"
+          className="text-xl font-bold"
+          onClick={() => setOpen(false)}
+        >
+          MG
+        </a>
+
+        <nav className="flex items-center gap-3 sm:gap-6" aria-label="Main">
+          <ul className="hidden gap-6 text-sm text-muted-foreground sm:flex">
+            {NAV.map((id) => (
+              <li key={id}>
+                <a
+                  href={`#${id}`}
+                  className="capitalize transition-colors hover:text-foreground"
+                >
+                  {id}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <ModeToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="sm:hidden"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            onClick={() => setOpen((o) => !o)}
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
+        </nav>
+      </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="mobile-menu"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.18 }}
+            className="absolute inset-x-0 top-full border-b bg-background shadow-lg sm:hidden"
+          >
+            <ul className="container mx-auto flex flex-col px-4 py-2">
+              {NAV.map((id) => (
+                <li key={id} className="border-b last:border-b-0">
+                  <a
+                    href={`#${id}`}
+                    onClick={() => setOpen(false)}
+                    className="block py-3.5 text-base font-medium capitalize"
+                  >
+                    {id}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+}
 
 /* ---------------- Skills ---------------- */
 
@@ -79,38 +161,59 @@ function SkillTile({ tech }: { tech: Tech }) {
   );
 }
 
+function FilterTabs<T extends string>({
+  items,
+  active,
+  onChange,
+  label,
+}: {
+  items: readonly T[];
+  active: T;
+  onChange: (v: T) => void;
+  label: string;
+}) {
+  return (
+    <div
+      className="-mx-4 mb-8 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 scrollbar-none"
+      role="tablist"
+      aria-label={label}
+    >
+      {items.map((c) => (
+        <Button
+          key={c}
+          size="sm"
+          role="tab"
+          className="shrink-0"
+          aria-selected={active === c}
+          variant={active === c ? "default" : "outline"}
+          onClick={() => onChange(c)}
+        >
+          {c}
+        </Button>
+      ))}
+    </div>
+  );
+}
+
 function Skills() {
   const [active, setActive] = useState("All");
   const groups =
     active === "All" ? skills : skills.filter((s) => s.category === active);
 
   return (
-    <section id="skills" className="scroll-mt-20 px-4 py-20">
+    <section id="skills" className="scroll-mt-20 px-4 py-16 md:py-20">
       <div className="container mx-auto max-w-6xl">
         <h2 className="mb-2 text-3xl font-bold">Skills & technologies</h2>
         <p className="mb-8 max-w-xl text-muted-foreground">
-          The tools I reach for across the frontend, backend and cloud. Hover an
-          icon, or pick a group.
+          The tools I use across frontend, backend and cloud.
         </p>
 
-        <div
-          className="mb-8 flex flex-wrap gap-2"
-          role="tablist"
-          aria-label="Skill groups"
-        >
-          {["All", ...skills.map((s) => s.category)].map((c) => (
-            <Button
-              key={c}
-              size="sm"
-              role="tab"
-              aria-selected={active === c}
-              variant={active === c ? "default" : "outline"}
-              onClick={() => setActive(c)}
-            >
-              {c}
-            </Button>
-          ))}
-        </div>
+        <FilterTabs
+          items={["All", ...skills.map((s) => s.category)]}
+          active={active}
+          onChange={setActive}
+          label="Skill groups"
+        />
 
         <motion.div
           key={active}
@@ -155,113 +258,87 @@ function Skills() {
 
 /* ---------------- Projects ---------------- */
 
-function TechChip({ tech }: { tech: Tech }) {
-  const Icon = tech.icon;
-  return (
-    <span className="inline-flex items-center gap-1.5 rounded-md border bg-background px-2 py-1 text-xs transition-transform motion-safe:hover:scale-105">
-      <Icon className="h-3.5 w-3.5" style={{ color: tech.color }} />
-      {tech.name}
-    </span>
-  );
-}
-
 function ProjectCard({ p }: { p: Project }) {
-  const Icon = p.icon;
-  const visible = p.featured ? p.tech : p.tech.slice(0, 6);
-  const hidden = p.tech.length - visible.length;
-
   return (
     <motion.article
       layout
-      initial={{ opacity: 0, scale: 0.96 }}
+      initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.96 }}
+      exit={{ opacity: 0, scale: 0.98 }}
       transition={{ duration: 0.25 }}
-      className={`group flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-shadow duration-200 hover:shadow-xl ${
-        p.featured ? "md:col-span-2 xl:col-span-3 md:flex-row" : ""
-      }`}
+      className="rounded-xl border bg-card p-5 shadow-sm sm:p-8"
     >
-      <div
-        className={`flex items-center justify-between p-5 ${
-          p.featured
-            ? "md:w-64 md:shrink-0 md:flex-col md:items-start md:justify-between md:p-6"
-            : ""
-        }`}
-        style={{
-          backgroundColor: `${p.accent}14`,
-          borderBottom: `3px solid ${p.accent}`,
-        }}
-      >
+      {/* Title + category */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <h3 className="text-xl font-bold tracking-tight sm:text-2xl">
+          {p.title}
+        </h3>
         <span
-          className="flex h-12 w-12 items-center justify-center rounded-lg text-white transition-transform duration-200 motion-safe:group-hover:-rotate-6 motion-safe:group-hover:scale-110"
-          style={{ backgroundColor: p.accent }}
+          className="rounded-md px-2.5 py-1 font-mono text-xs font-medium"
+          style={{ backgroundColor: `${p.accent}1F`, color: p.accent }}
         >
-          <Icon className="h-6 w-6" />
-        </span>
-        <span className="rounded-md bg-background/80 px-2 py-0.5 text-xs font-medium">
-          {p.featured ? `Featured · ${p.category}` : p.category}
+          {p.category}
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 p-6">
-        <div>
-          <h3 className="text-xl font-semibold">{p.title}</h3>
-          <p className="mt-1.5 text-muted-foreground">{p.summary}</p>
-        </div>
+      <p className="mt-3 leading-relaxed text-muted-foreground">{p.summary}</p>
 
-        <ul className="space-y-1.5 text-sm">
+      {/* Highlights */}
+      <div className="mt-5 border-t pt-5">
+        <h4 className="mb-3 text-sm font-semibold">Highlights:</h4>
+        <ul className="space-y-2 text-sm leading-relaxed">
           {p.highlights.map((h) => (
-            <li key={h} className="flex gap-2">
-              <Check
-                className="mt-0.5 h-4 w-4 shrink-0"
-                style={{ color: p.accent }}
+            <li key={h} className="flex gap-3">
+              <span
+                aria-hidden="true"
+                className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
+                style={{ backgroundColor: p.accent }}
               />
               <span>{h}</span>
             </li>
           ))}
         </ul>
+      </div>
 
-        <div className="flex flex-wrap gap-1.5">
-          {visible.map((t) => (
-            <TechChip key={t.name} tech={t} />
-          ))}
-          {hidden > 0 && (
-            <span
-              className="inline-flex items-center rounded-md border border-dashed px-2 py-1 text-xs text-muted-foreground"
-              title={p.tech
-                .slice(visible.length)
-                .map((t) => t.name)
-                .join(", ")}
-            >
-              +{hidden} more
-            </span>
-          )}
-        </div>
+      {/* Tech */}
+      <ul
+        className="mt-5 flex flex-wrap gap-2 border-t pt-5"
+        aria-label="Technologies used"
+      >
+        {p.tech.map((t) => (
+          <li
+            key={t.name}
+            className="rounded-md bg-muted px-2.5 py-1 font-mono text-xs text-muted-foreground"
+          >
+            {t.name}
+          </li>
+        ))}
+      </ul>
 
-        <div className="mt-auto flex flex-wrap items-center gap-2 pt-2">
-          {p.links.length > 0 ? (
-            p.links.map((l, i) => {
-              const LIcon = linkIcon[l.kind];
-              return (
-                <Button
-                  key={l.href}
-                  asChild
-                  size="sm"
-                  variant={i === 0 ? "default" : "outline"}
-                >
-                  <a href={l.href} target="_blank" rel="noopener noreferrer">
-                    <LIcon className="mr-2 h-4 w-4" />
-                    {l.label}
-                  </a>
-                </Button>
-              );
-            })
-          ) : (
-            <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Lock className="h-3.5 w-3.5" /> No public link yet
-            </p>
-          )}
-        </div>
+      {/* Links */}
+      <div className="mt-5 flex flex-wrap items-center gap-2">
+        {p.links.length > 0 ? (
+          p.links.map((l, i) => {
+            const LIcon = linkIcon[l.kind];
+            return (
+              <Button
+                key={l.href}
+                asChild
+                size="sm"
+                variant={i === 0 ? "default" : "outline"}
+              >
+                <a href={l.href} target="_blank" rel="noopener noreferrer">
+                  <LIcon className="mr-2 h-4 w-4" />
+                  {l.label}
+                </a>
+              </Button>
+            );
+          })
+        ) : (
+          <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Lock className="h-3.5 w-3.5" /> Private project (company code)
+          </p>
+        )}
       </div>
     </motion.article>
   );
@@ -273,34 +350,25 @@ function Projects() {
     filter === "All" ? projects : projects.filter((p) => p.category === filter);
 
   return (
-    <section id="projects" className="scroll-mt-20 bg-muted/50 px-4 py-20">
-      <div className="container mx-auto max-w-6xl">
+    <section
+      id="projects"
+      className="scroll-mt-20 bg-muted/50 px-4 py-16 md:py-20"
+    >
+      <div className="container mx-auto max-w-4xl">
         <h2 className="mb-2 text-3xl font-bold">Projects</h2>
         <p className="mb-8 max-w-xl text-muted-foreground">
           Products I have built across fintech, aviation, real estate and
           education.
         </p>
 
-        <div
-          className="mb-8 flex flex-wrap gap-2"
-          role="tablist"
-          aria-label="Project type"
-        >
-          {projectFilters.map((f) => (
-            <Button
-              key={f}
-              size="sm"
-              role="tab"
-              aria-selected={filter === f}
-              variant={filter === f ? "default" : "outline"}
-              onClick={() => setFilter(f)}
-            >
-              {f}
-            </Button>
-          ))}
-        </div>
+        <FilterTabs
+          items={projectFilters}
+          active={filter}
+          onChange={setFilter}
+          label="Project type"
+        />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="flex flex-col gap-6">
           <AnimatePresence mode="popLayout">
             {list.map((p) => (
               <ProjectCard key={p.id} p={p} />
@@ -318,33 +386,11 @@ export default function Home() {
   return (
     <MotionConfig reducedMotion="user">
       <main className="flex h-screen flex-col bg-background">
-        {/* <header className="fixed z-50 w-full border-b bg-background/80 backdrop-blur-sm"> */}
-        <header className="z-50 shrink-0 border-b bg-background">
-          <div className="container mx-auto flex items-center justify-between px-4 py-4">
-            <a href="#top" className="text-xl font-bold">
-              MG
-            </a>
-            <nav className="flex items-center gap-6">
-              <ul className="hidden gap-6 text-sm text-muted-foreground sm:flex">
-                {["about", "skills", "projects", "contact"].map((id) => (
-                  <li key={id}>
-                    <a
-                      href={`#${id}`}
-                      className="capitalize transition-colors hover:text-foreground"
-                    >
-                      {id}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <ModeToggle />
-            </nav>
-          </div>
-        </header>
+        <Header />
 
-        {/* Hero */}
         <div className="flex-1 overflow-y-auto scroll-smooth">
-          <section id="top" className="px-4 pb-16 pt-32">
+          {/* Hero */}
+          <section id="top" className="px-4 pb-14 pt-10 md:pb-16 md:pt-20">
             <motion.div
               className="container mx-auto flex max-w-4xl flex-col items-center gap-8 md:flex-row md:items-start"
               variants={heroParent}
@@ -364,35 +410,41 @@ export default function Home() {
                 />
               </motion.div>
 
-              <div>
+              <div className="text-center md:text-left">
                 <motion.h1
                   variants={heroChild}
-                  className="mb-3 text-4xl font-bold md:text-6xl"
+                  className="text-4xl font-bold tracking-tight md:text-6xl"
                 >
-                  Hi, I&apos;m Madan Ghimire
+                  Madan Ghimire
                 </motion.h1>
                 <motion.p
                   variants={heroChild}
-                  className="mb-1 flex items-center gap-1.5 text-sm text-muted-foreground"
+                  className="mt-2 text-xl font-medium md:text-2xl"
+                >
+                  Full Stack Software Engineer
+                </motion.p>
+                <motion.p
+                  variants={heroChild}
+                  className="mt-2 flex items-center justify-center gap-1.5 text-sm text-muted-foreground md:justify-start"
                 >
                   <MapPin className="h-4 w-4" /> Lalitpur, Nepal
                 </motion.p>
                 <motion.p
                   variants={heroChild}
-                  className="mb-8 mt-4 text-lg leading-snug tracking-tight text-muted-foreground md:text-xl"
+                  className="mb-8 mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg"
                 >
-                  Full Stack Software Engineer with 5+ years of experience
-                  building scalable, high-performance web apps with React,
-                  Next.js, TypeScript, Node.js and Express.js. I design frontend
-                  architecture (SSR/SSG/ISR/PPR), build REST APIs with Prisma
-                  ORM and PostgreSQL, and deploy on AWS (EC2, RDS, S3, IAM)
-                  using Docker and GitHub Actions CI/CD. Adaptable, and focused
-                  on clean, secure, scalable and maintainable code.
+                  5+ years building scalable web applications with React,
+                  Next.js, TypeScript and Node.js. I design frontend
+                  architecture (SSR/SSG/ISR/PPR) and lead frontend teams across
+                  distributed setups. On the backend, I architect Node.js and
+                  Express.js systems and build REST APIs with Prisma ORM and
+                  PostgreSQL. I deploy on AWS with Docker and GitHub Actions
+                  CI/CD.
                 </motion.p>
 
                 <motion.div
                   variants={heroChild}
-                  className="flex flex-wrap gap-3"
+                  className="flex flex-wrap justify-center gap-3 md:justify-start"
                 >
                   <Button asChild>
                     <a href={`mailto:${EMAIL}`}>
@@ -400,27 +452,11 @@ export default function Home() {
                       Contact me
                     </a>
                   </Button>
-                  <Button variant="outline" asChild>
-                    <a href={GITHUB} target="_blank" rel="noopener noreferrer">
-                      <Github className="mr-2 h-4 w-4" />
-                      GitHub
-                    </a>
-                  </Button>
-                  <Button variant="outline" asChild>
-                    <a
-                      href={LINKEDIN}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Linkedin className="mr-2 h-4 w-4" />
-                      LinkedIn
-                    </a>
-                  </Button>
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button variant="outline">
                         <FileText className="mr-2 h-4 w-4" />
-                        Preview resume
+                        Resume
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="flex h-[92vh] w-[95vw] flex-col gap-0 overflow-hidden p-0 sm:max-w-5xl">
@@ -434,10 +470,36 @@ export default function Home() {
                       />
                     </DialogContent>
                   </Dialog>
-                  <Button variant="secondary" asChild>
-                    <a href={RESUME_PATH} download>
-                      <Download className="mr-2 h-4 w-4" />
-                      Download resume
+                  <Button variant="outline" size="icon" asChild>
+                    <a
+                      href={RESUME_PATH}
+                      download
+                      aria-label="Download resume"
+                      title="Download resume"
+                    >
+                      <Download className="h-4 w-4" />
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="icon" asChild>
+                    <a
+                      href={GITHUB}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="GitHub"
+                      title="GitHub"
+                    >
+                      <Github className="h-4 w-4" />
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="icon" asChild>
+                    <a
+                      href={LINKEDIN}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="LinkedIn"
+                      title="LinkedIn"
+                    >
+                      <Linkedin className="h-4 w-4" />
                     </a>
                   </Button>
                 </motion.div>
@@ -447,23 +509,21 @@ export default function Home() {
 
           {/* About */}
           <section id="about" className="scroll-mt-20 bg-muted/50 px-4 py-16">
-            <div className="container mx-auto max-w-4xl space-y-4 text-lg text-muted-foreground">
+            <div className="container mx-auto max-w-4xl space-y-4 text-base leading-relaxed text-muted-foreground md:text-lg">
               <h2 className="mb-6 text-3xl font-bold text-foreground">
                 About me
               </h2>
               <p>
-                I&apos;m a detail-oriented, solution-driven engineer who is
-                comfortable on both sides of the stack. I specialize in frontend
-                architecture with React and Next.js (SSR, SSG, ISR, PPR), and I
-                build the REST APIs behind it with Node.js, Express.js, Prisma
-                ORM and PostgreSQL.
+                I&apos;m a detail-oriented engineer who is comfortable on both
+                sides of the stack. I specialize in frontend architecture with
+                React and Next.js, and build the REST APIs behind it with
+                Node.js, Express.js, Prisma ORM and PostgreSQL.
               </p>
               <p>
-                I deploy what I build: Linux servers on AWS EC2, RDS and S3 with
-                IAM access control, and GitHub Actions pipelines that build
-                Docker images and roll them out automatically. I care about
-                clean, secure, scalable and maintainable code, and I enjoy
-                mentoring other developers.
+                I deploy on Ubuntu servers on AWS EC2, with RDS and S3 under IAM
+                access control, and GitHub Actions pipelines that build Docker
+                images and roll them out automatically. I care about clean,
+                secure, scalable and maintainable code.
               </p>
             </div>
           </section>
@@ -472,7 +532,7 @@ export default function Home() {
           <Projects />
 
           {/* Contact */}
-          <section id="contact" className="scroll-mt-20 px-4 py-20">
+          <section id="contact" className="scroll-mt-20 px-4 py-16 md:py-20">
             <div className="container mx-auto max-w-3xl">
               <h2 className="mb-3 text-center text-3xl font-bold">
                 Let&apos;s work together
