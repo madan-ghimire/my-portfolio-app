@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-providers";
@@ -14,30 +14,44 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Bare domain redirects to www on Vercel, so www is the canonical address.
+const SITE_URL = "https://www.madanghimire.info.np";
+const JOB_TITLE = "Full Stack Software Engineer";
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID; // e.g. G-XXXXXXXXXX (set in Vercel env vars)
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#000000",
+  colorScheme: "light dark",
+};
+
 export const metadata: Metadata = {
   title: {
-    default: "Madan Ghimire | Full Stack Developer from Nepal",
+    default: `Madan Ghimire | ${JOB_TITLE} from Nepal`,
     template: "%s | Madan Ghimire",
   },
   description:
-    "Madan Ghimire is a passionate Full Stack Developer from Lalitpur, Nepal specializing in React.js, Next.js, TypeScript, Node.js, and modern web technologies. Building scalable SaaS applications and elegant user interfaces.",
+    "Madan Ghimire is a Full Stack Software Engineer from Lalitpur, Nepal specializing in React.js, Next.js, TypeScript, Node.js, and modern web technologies. Building scalable SaaS applications and elegant user interfaces.",
   keywords: [
     "Madan Ghimire",
     "Madan Ghimire Nepal",
-    "Full Stack Developer Nepal",
-    "Next.js Developer Nepal",
-    "React Developer Nepal",
-    "TypeScript Developer",
-    "Prisma ORM Developer",
-    "Tailwind CSS Expert",
-    "SaaS Developer",
-    "Web Developer Lalitpur",
+    "Full Stack Software Engineer Nepal",
     "Software Engineer Nepal",
-    "Frontend Developer Nepal",
-    "Backend Developer Nepal",
-    "MERN Stack Developer",
-    "JavaScript Developer Nepal",
-    "Node.js Developer Nepal",
+    "Software Engineer Lalitpur",
+    "Next.js Engineer Nepal",
+    "React Engineer Nepal",
+    "TypeScript Engineer",
+    "Frontend Engineer Nepal",
+    "Backend Engineer Nepal",
+    "Node.js Engineer Nepal",
+    "MERN Stack Engineer",
+    "SaaS Engineer",
+    "Prisma ORM",
+    "Tailwind CSS",
+    // Search-term variants people commonly type
+    "Full Stack Developer Nepal",
+    "React Developer Nepal",
   ],
   authors: [
     {
@@ -52,40 +66,39 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://my-portfolio-app-henna.vercel.app/"), // Replace with your actual domain
+  metadataBase: new URL(SITE_URL),
   alternates: {
-    canonical: "https://my-portfolio-app-henna.vercel.app/", // Replace with your actual domain
+    canonical: SITE_URL,
   },
   openGraph: {
-    title: "Madan Ghimire | Full Stack Developer from Nepal",
+    title: `Madan Ghimire | ${JOB_TITLE} from Nepal`,
     description:
-      "Passionate Full Stack Developer from Lalitpur, Nepal creating scalable web applications with React.js, Next.js, and modern technologies. View my portfolio and projects.",
-    url: "https://my-portfolio-app-henna.vercel.app/", // Replace with your actual domain
+      "Full Stack Software Engineer from Lalitpur, Nepal building scalable web applications with React.js, Next.js, and modern technologies. View my portfolio and projects.",
+    url: SITE_URL,
     siteName: "Madan Ghimire Portfolio",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/og-image.jpg", // Add this image to your public folder
+        url: "/og-image.jpg", // must exist in /public
         width: 1200,
         height: 630,
-        alt: "Madan Ghimire - Full Stack Developer Portfolio",
+        alt: `Madan Ghimire - ${JOB_TITLE} Portfolio`,
         type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Madan Ghimire | Full Stack Developer from Nepal",
+    title: `Madan Ghimire | ${JOB_TITLE} from Nepal`,
     description:
-      "Passionate Full Stack Developer creating scalable SaaS applications using Next.js, React, TypeScript, and modern web technologies.",
+      "Full Stack Software Engineer building scalable SaaS applications with Next.js, React, TypeScript, and modern web technologies.",
     creator: "@madan__ghimire",
-    images: ["/og-image.jpg"], // Same image as OG
+    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
     follow: true,
-    nocache: true,
     googleBot: {
       index: true,
       follow: true,
@@ -102,8 +115,44 @@ export const metadata: Metadata = {
     twitter: "https://x.com/madan__ghimire",
     github: "https://github.com/madan-ghimire",
     location: "Lalitpur, Nepal",
-    profession: "Full Stack Developer",
+    profession: JOB_TITLE,
   },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Madan Ghimire",
+  jobTitle: JOB_TITLE,
+  description:
+    "Full Stack Software Engineer from Lalitpur, Nepal specializing in modern web technologies",
+  url: SITE_URL,
+  image: `${SITE_URL}/profile.jpg`,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Lalitpur",
+    addressRegion: "Bagmati Province",
+    addressCountry: "Nepal",
+  },
+  sameAs: [
+    "https://www.linkedin.com/in/madan-ghimire-21416a143/",
+    "https://x.com/madan__ghimire",
+    "https://github.com/madan-ghimire",
+  ],
+  knowsAbout: [
+    "React.js",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    "JavaScript",
+    "Full Stack Development",
+    "Software Engineering",
+    "SaaS Development",
+    "Prisma ORM",
+    "Tailwind CSS",
+  ],
+  // TODO (from resume): add your current employer, e.g.
+  // worksFor: { "@type": "Organization", name: "Company Name" },
 };
 
 export default function RootLayout({
@@ -114,11 +163,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Additional Meta Tags for Better SEO */}
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#000000" />
-        <meta name="color-scheme" content="light dark" />
-
         {/* Geo Tags */}
         <meta name="geo.region" content="NP-03" />
         <meta name="geo.placename" content="Lalitpur, Nepal" />
@@ -126,14 +170,14 @@ export default function RootLayout({
         <meta name="ICBM" content="27.6588, 85.3247" />
 
         {/* Professional Tags */}
-        <meta name="profession" content="Full Stack Developer" />
+        <meta name="profession" content={JOB_TITLE} />
         <meta
           name="specialization"
-          content="React.js, Next.js, TypeScript, Node.js"
+          content="React.js, Next.js, TypeScript, Node.js, Express.js"
         />
-        <meta name="experience" content="Full Stack Web Development" />
+        <meta name="experience" content="Full Stack Software Engineering" />
 
-        {/* Verification Tags (Add these when you get them) */}
+        {/* Verification Tags (add when you get them) */}
         {/* <meta name="google-site-verification" content="your-google-verification-code" /> */}
 
         {/* Favicons */}
@@ -144,45 +188,7 @@ export default function RootLayout({
         {/* JSON-LD Structured Data */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Madan Ghimire",
-              jobTitle: "Full Stack Developer",
-              description:
-                "Passionate Full Stack Developer from Lalitpur, Nepal specializing in modern web technologies",
-              url: "https://my-portfolio-app-henna.vercel.app/", // Replace with your domain
-              image: "https://my-portfolio-app-henna.vercel.app//profile.jpg", // Replace with your domain
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: "Lalitpur",
-                addressRegion: "Bagmati Province",
-                addressCountry: "Nepal",
-              },
-              sameAs: [
-                "https://www.linkedin.com/in/madan-ghimire-21416a143/",
-                "https://x.com/madan__ghimire",
-                "https://github.com/madan-ghimire",
-              ],
-              knowsAbout: [
-                "React.js",
-                "Next.js",
-                "TypeScript",
-                "Node.js",
-                "JavaScript",
-                "Full Stack Development",
-                "Web Development",
-                "SaaS Development",
-                "Prisma ORM",
-                "Tailwind CSS",
-              ],
-              worksFor: {
-                "@type": "Organization",
-                name: "Freelance Developer",
-              },
-            }),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body
@@ -197,38 +203,26 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
 
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            
-            gtag('config', 'GA_MEASUREMENT_ID', {
-              page_title: 'Madan Ghimire Portfolio',
-              page_location: window.location.href,
-              custom_map: {
-                'dimension1': 'Full Stack Developer',
-                'dimension2': 'Nepal'
-              }
-            });
-          `}
-        </Script>
-
-        {/* Google Tag Manager (Optional - alternative to GA) */}
-        {/* <Script id="google-tag-manager" strategy="afterInteractive">
-          {`
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-XXXXXXX');
-          `}
-        </Script> */}
+        {/* Google Analytics: only loads when NEXT_PUBLIC_GA_ID is set */}
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}', {
+                  page_title: 'Madan Ghimire Portfolio',
+                  page_location: window.location.href
+                });
+              `}
+            </Script>
+          </>
+        )}
       </body>
     </html>
   );
