@@ -34,6 +34,7 @@ import {
   projects,
   skills,
   softSkills,
+  workPrinciples,
   type Project,
   type ProjectLink,
   type Tech,
@@ -150,13 +151,13 @@ function SkillTile({ tech }: { tech: Tech }) {
   return (
     <li
       style={{ "--c": glow } as CSSProperties}
-      className="group flex flex-col items-center gap-2.5 rounded-xl border bg-card px-2 py-4 text-center text-xs font-medium transition duration-200 hover:border-(--c) hover:shadow-[0_10px_28px_-10px_var(--c)] motion-safe:hover:-translate-y-1.5"
+      className="group flex min-w-0 flex-col items-center justify-start gap-2 rounded-xl border bg-card px-1.5 py-3 text-center text-[11px] font-medium transition duration-200 hover:border-(--c) hover:shadow-[0_10px_28px_-10px_var(--c)] motion-safe:hover:-translate-y-1.5 sm:gap-2.5 sm:px-2 sm:py-4 sm:text-xs"
     >
       <Icon
-        className="h-8 w-8 transition-transform duration-200 motion-safe:group-hover:-rotate-6 motion-safe:group-hover:scale-125"
+        className="h-7 w-7 shrink-0 transition-transform duration-200 motion-safe:group-hover:-rotate-6 motion-safe:group-hover:scale-125 sm:h-8 sm:w-8"
         style={{ color: tech.color }}
       />
-      <span className="leading-tight">{tech.name}</span>
+      <span className="wrap-break-word leading-tight">{tech.name}</span>
     </li>
   );
 }
@@ -174,7 +175,7 @@ function FilterTabs<T extends string>({
 }) {
   return (
     <div
-      className="-mx-4 mb-8 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 scrollbar-none"
+      className="mb-6 flex flex-wrap gap-1.5 sm:mb-8 sm:gap-2"
       role="tablist"
       aria-label={label}
     >
@@ -183,7 +184,7 @@ function FilterTabs<T extends string>({
           key={c}
           size="sm"
           role="tab"
-          className="shrink-0"
+          className="h-8 px-3 text-xs sm:h-9 sm:px-4 sm:text-sm"
           aria-selected={active === c}
           variant={active === c ? "default" : "outline"}
           onClick={() => onChange(c)}
@@ -201,11 +202,14 @@ function Skills() {
     active === "All" ? skills : skills.filter((s) => s.category === active);
 
   return (
-    <section id="skills" className="scroll-mt-20 px-4 py-16 md:py-20">
+    <section id="skills" className="scroll-mt-20 px-4 py-12 md:py-20">
       <div className="container mx-auto max-w-6xl">
-        <h2 className="mb-2 text-3xl font-bold">Skills & technologies</h2>
-        <p className="mb-8 max-w-xl text-muted-foreground">
-          The tools I use across frontend, backend and cloud.
+        <h2 className="mb-2 text-2xl font-bold sm:text-3xl">
+          Skills & technologies
+        </h2>
+        <p className="mb-6 max-w-xl text-sm text-muted-foreground sm:mb-8 sm:text-base">
+          The tools and practices I use across frontend, backend, security,
+          cloud and AI-assisted development.
         </p>
 
         <FilterTabs
@@ -220,14 +224,14 @@ function Skills() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.25 }}
-          className="space-y-8"
+          className="space-y-6 sm:space-y-8"
         >
           {groups.map((g) => (
             <div key={g.category}>
               <h3 className="mb-3 text-sm font-semibold text-muted-foreground">
                 {g.category}
               </h3>
-              <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
+              <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 md:grid-cols-5 lg:grid-cols-7">
                 {g.items.map((t) => (
                   <SkillTile key={t.name} tech={t} />
                 ))}
@@ -236,15 +240,33 @@ function Skills() {
           ))}
         </motion.div>
 
-        <div className="mt-12">
+        <div className="mt-10 sm:mt-12">
           <h3 className="mb-3 text-sm font-semibold text-muted-foreground">
             How I work
           </h3>
-          <ul className="flex flex-wrap gap-2">
+
+          <ul className="mb-5 grid gap-3 sm:mb-6 sm:grid-cols-2">
+            {workPrinciples.map(({ title, text, icon: Icon }) => (
+              <li
+                key={title}
+                className="rounded-xl border bg-card p-3.5 sm:p-4"
+              >
+                <div className="mb-2 flex items-center gap-2.5">
+                  <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                  <h4 className="font-semibold">{title}</h4>
+                </div>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {text}
+                </p>
+              </li>
+            ))}
+          </ul>
+
+          <ul className="flex flex-wrap gap-1.5 sm:gap-2">
             {softSkills.map((s) => (
               <li
                 key={s}
-                className="rounded-md border bg-muted/50 px-3 py-1.5 text-sm"
+                className="rounded-md border bg-muted/50 px-2.5 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm"
               >
                 {s}
               </li>
@@ -434,12 +456,12 @@ export default function Home() {
                   className="mb-8 mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg"
                 >
                   5+ years building scalable web applications with React,
-                  Next.js, TypeScript and Node.js. I design frontend
-                  architecture (SSR/SSG/ISR/PPR) and lead frontend teams across
-                  distributed setups. On the backend, I architect Node.js and
-                  Express.js systems and build REST APIs with Prisma ORM and
-                  PostgreSQL. I deploy on AWS with Docker and GitHub Actions
-                  CI/CD.
+                  Next.js, TypeScript and Node.js. I design frontend and backend
+                  systems with clean, object-oriented architecture, build REST
+                  APIs with Prisma ORM and PostgreSQL, and secure them with
+                  validation, sanitization and access control. I ship with
+                  Docker and GitHub Actions CI/CD on AWS, and use AI tools to
+                  automate repetitive work and deliver faster.
                 </motion.p>
 
                 <motion.div
@@ -517,13 +539,24 @@ export default function Home() {
                 I&apos;m a detail-oriented engineer who is comfortable on both
                 sides of the stack. I specialize in frontend architecture with
                 React and Next.js, and build the REST APIs behind it with
-                Node.js, Express.js, Prisma ORM and PostgreSQL.
+                Node.js, Express.js, Prisma ORM and PostgreSQL. I apply
+                object-oriented principles and clean architecture, and think
+                through system design on both the frontend and the backend
+                before I write code.
               </p>
               <p>
-                I deploy on Ubuntu servers on AWS EC2, with RDS and S3 under IAM
-                access control, and GitHub Actions pipelines that build Docker
-                images and roll them out automatically. I care about clean,
-                secure, scalable and maintainable code.
+                Security is part of the design, not an afterthought: I validate
+                and sanitize input, enforce access with JWT, role-based access
+                and data-layer policies, and keep secrets out of code.
+              </p>
+              <p>
+                I deploy containerized apps on Ubuntu servers on AWS EC2, with
+                RDS and S3 under least-privilege IAM access, and GitHub Actions
+                pipelines that build Docker images and roll them out
+                automatically. I use AI tools to take over repetitive and manual
+                tasks such as boilerplate, tests and docs, then review the
+                result myself. That lets me ship quickly without lowering the
+                bar on clean, secure, scalable and maintainable code.
               </p>
             </div>
           </section>

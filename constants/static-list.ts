@@ -44,6 +44,8 @@ import {
   Database,
   HardDrive,
   ShieldCheck,
+  ShieldAlert,
+  Shield,
   Route,
   Sparkles,
   Layers,
@@ -55,6 +57,14 @@ import {
   LockKeyhole,
   Fingerprint,
   Blocks,
+  Boxes,
+  Network,
+  Bot,
+  Rocket,
+  Eraser,
+  Filter,
+  Users,
+  FlaskConical,
   Component as ComponentIcon,
   Drama,
   PawPrint,
@@ -137,12 +147,59 @@ export const tech = defineTech({
     icon: SiGithubactions,
     color: "#2088FF",
   },
+  autoDeploy: { name: "Automated deploys", icon: Rocket, color: "#F97316" },
   netlify: { name: "Netlify", icon: SiNetlify, color: "#00C7B7" },
 
   nextauth: { name: "NextAuth", icon: KeyRound, color: "#A855F7" },
   jwt: { name: "JWT", icon: SiJsonwebtokens, color: "#D63AFF" },
   oauth: { name: "OAuth", icon: LockKeyhole, color: "#EB5424" },
   zenstack: { name: "ZenStack Policies", icon: Fingerprint, color: "#F59E0B" },
+
+  /* Software design & architecture */
+  oop: { name: "OOP", icon: Boxes, color: "#0EA5E9" },
+  cleanArch: { name: "Clean architecture", icon: Layers, color: "#14B8A6" },
+  separation: {
+    name: "Separation of concerns",
+    icon: Blocks,
+    color: "#8B5CF6",
+  },
+  frontendDesign: {
+    name: "Frontend system design",
+    icon: ComponentIcon,
+    color: "#F43F5E",
+  },
+  backendDesign: {
+    name: "Backend system design",
+    icon: Network,
+    color: "#22C55E",
+  },
+  multiTenancy: { name: "Multi-tenancy", icon: Building2, color: "#0D9488" },
+
+  /* Security */
+  owasp: { name: "OWASP Top 10", icon: ShieldAlert, color: "#EF4444" },
+  sanitization: { name: "Data sanitization", icon: Eraser, color: "#F43F5E" },
+  validation: { name: "Input validation", icon: Filter, color: "#F97316" },
+  rbac: { name: "RBAC", icon: Users, color: "#6366F1" },
+  secrets: { name: "Secrets management", icon: KeyRound, color: "#EAB308" },
+  secureHeaders: {
+    name: "CORS & secure headers",
+    icon: Shield,
+    color: "#06B6D4",
+  },
+
+  /* AI-assisted development */
+  aiAssistants: { name: "AI coding assistants", icon: Bot, color: "#8B5CF6" },
+  promptEng: { name: "Prompt engineering", icon: Sparkles, color: "#A855F7" },
+  aiAutomation: {
+    name: "Task automation",
+    icon: Workflow,
+    color: "#14B8A6",
+  },
+  aiTests: {
+    name: "AI-assisted tests & docs",
+    icon: FlaskConical,
+    color: "#22C55E",
+  },
 
   mui: { name: "Material UI", icon: SiMui, color: "#007FFF" },
   kendo: { name: "Kendo React", icon: ComponentIcon, color: "#FF6358" },
@@ -224,7 +281,29 @@ export const skills = [
     ),
   },
   {
-    category: "Cloud & DevOps",
+    category: "Design & architecture",
+    items: pick(
+      "oop",
+      "cleanArch",
+      "separation",
+      "frontendDesign",
+      "backendDesign",
+      "multiTenancy",
+    ),
+  },
+  {
+    category: "Security",
+    items: pick(
+      "owasp",
+      "sanitization",
+      "validation",
+      "rbac",
+      "secrets",
+      "secureHeaders",
+    ),
+  },
+  {
+    category: "Cloud, CI/CD & containers",
     items: pick(
       "ec2",
       "rds",
@@ -234,9 +313,14 @@ export const skills = [
       "docker",
       "dockerHub",
       "githubActions",
+      "autoDeploy",
     ),
   },
   { category: "Auth", items: pick("nextauth", "jwt", "oauth", "zenstack") },
+  {
+    category: "AI-assisted dev",
+    items: pick("aiAssistants", "promptEng", "aiAutomation", "aiTests"),
+  },
   {
     category: "UI libraries",
     items: pick("mui", "kendo", "antd", "radix", "shadcn", "styled"),
@@ -257,6 +341,33 @@ export const skills = [
   },
 ];
 
+/* ---------- How I work ---------- */
+
+export type WorkPrinciple = { title: string; icon: ElementType; text: string };
+
+export const workPrinciples: WorkPrinciple[] = [
+  {
+    title: "Designed before coded",
+    icon: Network,
+    text: "I plan the system on both sides of the stack: rendering strategy, state and caching boundaries on the frontend; API design, data isolation, queues and scaling on the backend. OOP and clean architecture keep it easy to change.",
+  },
+  {
+    title: "Secure by default",
+    icon: ShieldCheck,
+    text: "Every input is validated and sanitized. Access is enforced with JWT, role-based access and data-layer policies, secrets stay out of the code, and cloud access follows least privilege.",
+  },
+  {
+    title: "AI-assisted, human-reviewed",
+    icon: Bot,
+    text: "I use AI tools to automate repetitive and manual work such as scaffolding, boilerplate, tests, docs and refactors, so I can ship faster. I review the output for correctness, accessibility and security before it merges.",
+  },
+  {
+    title: "Automated delivery",
+    icon: Rocket,
+    text: "Docker containers and GitHub Actions pipelines build, test and deploy on every push, so releases are repeatable and need no manual steps.",
+  },
+];
+
 export const softSkills = [
   "Problem solving & critical thinking",
   "Communication & collaboration",
@@ -266,6 +377,12 @@ export const softSkills = [
   "Time management & prioritization",
   "Creativity & innovation",
   "Clean, secure, scalable code",
+  "Security first: validate & sanitize input",
+  "System design for frontend & backend",
+  "OOP & clean architecture",
+  "AI-assisted delivery, human-reviewed",
+  "Automating repetitive & manual work",
+  "CI/CD & containers for repeatable releases",
 ];
 
 /* ---------- Projects ---------- */
@@ -306,10 +423,11 @@ export const projects: Project[] = [
     summary:
       "Property listings and tenant dashboards on a PERN stack. Every tenant's data is isolated, and the backend ships itself to AWS on each push.",
     highlights: [
-      "Tenant-isolated PostgreSQL data with Prisma ORM v7, JWT auth and Nodemailer emails",
+      "Tenant-isolated PostgreSQL data with Prisma ORM v7, layered Express/TypeScript backend and Nodemailer emails",
+      "JWT auth with role-based authorization, input validation and data sanitization",
       "All endpoints documented with Swagger",
-      "GitHub Actions builds a Docker image, pushes it to Docker Hub, then EC2 pulls it and restarts the container",
-      "Ubuntu EC2 backend, RDS database, S3 file storage and IAM-scoped access; frontend on Netlify",
+      "Dockerized backend: GitHub Actions builds the image, pushes it to Docker Hub, then EC2 pulls it and restarts the container, with credentials kept in GitHub Secrets",
+      "Ubuntu EC2 backend, RDS database, S3 file storage and least-privilege IAM access; frontend on Netlify",
     ],
     tech: pick(
       "next",
@@ -322,6 +440,7 @@ export const projects: Project[] = [
       "prisma",
       "postgres",
       "jwt",
+      "sanitization",
       "swagger",
       "ec2",
       "rds",
@@ -355,7 +474,7 @@ export const projects: Project[] = [
       "Aircraft management SaaS for aviation: lifecycle tracking, bills of materials, maintenance schedules and parts inventory.",
     highlights: [
       "Reusable components and customizable dashboards",
-      "ZenStack, Prisma, Server Actions and TanStack Query for data",
+      "ZenStack access policies, Prisma, Server Actions and TanStack Query for data",
       "Query tuning and memoization for scale",
     ],
     tech: pick(
