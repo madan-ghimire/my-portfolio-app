@@ -443,7 +443,7 @@ export default function Home() {
                   variants={heroChild}
                   className="mt-2 text-xl font-medium md:text-2xl"
                 >
-                  Full Stack Software Engineer
+                  Full Stack Software Developer
                 </motion.p>
                 <motion.p
                   variants={heroChild}

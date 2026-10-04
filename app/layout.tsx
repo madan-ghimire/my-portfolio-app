@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 // Bare domain redirects to www on Vercel, so www is the canonical address.
 const SITE_URL = "https://www.madanghimire.info.np";
-const JOB_TITLE = "Full Stack Software Engineer";
+const JOB_TITLE = "Full Stack Software Developer";
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID; // e.g. G-XXXXXXXXXX (set in Vercel env vars)
 
 export const viewport: Viewport = {
@@ -37,17 +37,17 @@ export const metadata: Metadata = {
   keywords: [
     "Madan Ghimire",
     "Madan Ghimire Nepal",
-    "Full Stack Software Engineer Nepal",
-    "Software Engineer Nepal",
-    "Software Engineer Lalitpur",
-    "Next.js Engineer Nepal",
-    "React Engineer Nepal",
-    "TypeScript Engineer",
-    "Frontend Engineer Nepal",
-    "Backend Engineer Nepal",
-    "Node.js Engineer Nepal",
-    "MERN Stack Engineer",
-    "SaaS Engineer",
+    "Full Stack Software Developer Nepal",
+    "Software Developer Nepal",
+    "Software Developer Lalitpur",
+    "Next.js Developer Nepal",
+    "React Developer Nepal",
+    "TypeScript Developer",
+    "Frontend Developer Nepal",
+    "Backend Developer Nepal",
+    "Node.js Developer Nepal",
+    "MERN Stack Developer",
+    "SaaS Developer",
     "Prisma ORM",
     "Tailwind CSS",
     // Search-term variants people commonly type
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Madan Ghimire | ${JOB_TITLE} from Nepal`,
     description:
-      "Full Stack Software Engineer from Lalitpur, Nepal building scalable web applications with React.js, Next.js, and modern technologies. View my portfolio and projects.",
+      "Full Stack Software Developer from Lalitpur, Nepal building scalable web applications with React.js, Next.js, and modern technologies. View my portfolio and projects.",
     url: SITE_URL,
     siteName: "Madan Ghimire Portfolio",
     locale: "en_US",
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `Madan Ghimire | ${JOB_TITLE} from Nepal`,
     description:
-      "Full Stack Software Engineer building scalable SaaS applications with Next.js, React, TypeScript, and modern web technologies.",
+      "Full Stack Software Developer building scalable SaaS applications with Next.js, React, TypeScript, and modern web technologies.",
     creator: "@madan__ghimire",
     images: ["/og-image.jpg"],
   },
@@ -126,7 +126,7 @@ const jsonLd = {
   name: "Madan Ghimire",
   jobTitle: JOB_TITLE,
   description:
-    "Full Stack Software Engineer from Lalitpur, Nepal specializing in modern web technologies",
+    "Full Stack Software Developer from Lalitpur, Nepal specializing in modern web technologies",
   url: SITE_URL,
   image: `${SITE_URL}/profile.jpg`,
   address: {
