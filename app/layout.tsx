@@ -29,11 +29,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: `Madan Ghimire | ${JOB_TITLE} from Nepal`,
+    default: "Madan Ghimire | Full Stack Developer in Lalitpur, Nepal",
     template: "%s | Madan Ghimire",
   },
   description:
-    "Madan Ghimire is a Full Stack Software Engineer from Lalitpur, Nepal specializing in React.js, Next.js, TypeScript, Node.js, and modern web technologies. Building scalable SaaS applications and elegant user interfaces.",
+    "Madan Ghimire is a Full Stack Developer in Lalitpur, Nepal with 5+ years of experience in React, Next.js, TypeScript and Node.js. View projects and get in touch.",
   keywords: [
     "Madan Ghimire",
     "Madan Ghimire Nepal",

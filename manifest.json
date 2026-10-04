@@ -34,7 +34,16 @@
       "type": "image/png"
     }
   ],
-  "categories": ["portfolio", "developer", "technology"],
+  "categories": [
+    "portfolio",
+    "developer",
+    "technology",
+    "fast learner",
+    "ai",
+    "si",
+    "llm",
+    "agentic ai"
+  ],
   "lang": "en",
   "scope": "/",
   "related_applications": [],
